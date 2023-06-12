@@ -148,6 +148,9 @@
 </head>
 
 <body>
+
+
+
        <script id="main">
             var preciofijado = '';
             $(document).ready(function () {
@@ -157,6 +160,17 @@
                 $('body').prepend(createYear(2023));
                 clearSelection();
             });
+
+             // $ (function(){
+             //    var contar = $(".day").find("div#precio");
+             //    console.log(contar.length);
+
+             //    if (contar.length == 0){
+             //        console.log("no tiene precio");
+             //    }else{
+             //        console.log("tiene precio");
+             //    }
+             // });
         </script>
         
         <script id="builder">
@@ -298,21 +312,63 @@
                 if (!argEventData.ctrlKey) { clearSelection(); }
                 $(`div.day[data-month="${argMonth}"]`).addClass('selected').each(function (i, e) {
                     currentSelection.add(new Date($(e).attr('data-year'), $(e).attr('data-month'), $(e).attr('data-day')));
+
                 });
+                
+                var contar = $(".selected");
+                console.log (contar);
+                console.log(contar.length);
+
+                if (contar.length == 0){
+                    console.log("no tiene precio");
+                }else{
+                    console.log("tiene precio");
+                }
                 //console.log(currentSelection);
             }
             function selectWeek(argWeek, argEventData) {
                 if (!argEventData.ctrlKey) { clearSelection(); }
                 $(`div.day[data-week="${argWeek}"]`).addClass('selected');
+
+                var contar = $(".selected");
+                console.log (contar);
+                console.log(contar.length);
+
+                if (contar.length == 0){
+                    console.log("no tiene precio");
+                }else{
+                    console.log("tiene precio");
+                }
             }
             function selectWeekDay(argWeekDay, argMonth, argEventData) {
                 if (!argEventData.ctrlKey) { clearSelection(); }
                 $(`div.day[data-weekday="${argWeekDay}"][data-month="${argMonth}"]`).addClass('selected');
+                
+                var contar = $(".selected");
+                console.log (contar);
+                console.log(contar.length);
+
+                if (contar.length == 0){
+                    console.log("no tiene precio");
+                }else{
+                    console.log("tiene precio");
+                }
             }
 
             function selectDay(argDate, argEventData) {
                 if (!argEventData.ctrlKey) { clearSelection(); }
                 $(`div.day[data-dayofyear="${argDate}"]`).addClass('selected');
+
+                var contar = $(".selected");
+                console.log (contar);
+                console.log(contar.length);
+
+                if (contar.length == 0){
+                    console.log("no tiene precio");
+                }else{
+                    console.log("tiene precio");
+                }
+
             }                
           
         </script> 
@@ -322,8 +378,7 @@
         <br>
         <hr>
         <button href="#" class="btn" id="open">Definir Parametros</button >
-        <button href="#" class="btn" id="contar" onclick="contarHijos()">Contar</button >
-       
+             
         <div class="modal-container" id="modal_container">
             <div class="modal">
                 <h1> I-rent</h1>
@@ -362,21 +417,17 @@
                 var argContents = document.getElementById('precio_dia').value;
                 var objects = document.getElementsByClassName("day selected");
                 $(function(){
-                    var hijo = $('#dias.selected').children();
+                
                     for (var obj of objects) {                           
-                        $('#dias.selected').append('<div class="content" id="precio">'+argContents+'</div>');
-                        break;
-                    }
+                            $('#dias.selected').append('<div class="content" id="precio">'+argContents+'</div>');
+                            break;
+                        }
                    
                 })
                 modal_container.classList.remove('show');
-            
-                var objects1 = document.getElementsById("precio");
-                for (var obj of objects1) {                           
-                       console.log(obj);
-                        
-                    }
+                
             } 
+             
          </script>
 
     </div>
