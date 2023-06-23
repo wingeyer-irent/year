@@ -12,7 +12,6 @@
     <link href="https://www.rentalbookingsystem.com/styles.css" type="text/css" rel="stylesheet" />
     <link href="https://sys-static-content.s3.amazonaws.com/css/jquery-ui-1.12.0/smoothness/jquery-ui.min.css" rel="stylesheet" >
     
-
     <title>Calendario</title>
     <style>
         @import url(https://fonts.googleapis.com/css?family=Muli:300,400,600,700);
@@ -287,7 +286,8 @@
                 .attr('data-year', argDate.year())
                 .attr('data-week', argDate.isoWeek())
                 .attr('data-weekday', argDate.day())
-                .attr('data-dayofyear', argDate.dayOfYear());
+                .attr('data-dayofyear', argDate.dayOfYear())
+                .attr('bandera','false');
 
                 dayElement
                 .append(createDayTitle(argDate))
@@ -346,19 +346,7 @@
             } 
 
         </script> 
-
-        <script id="arreglo">
-              $(document).ready(function(){ 
-                var y = []; 
-                x=$("div#dias").toArray(); 
-                for (i=0;i<x.length;i++){ 
-                    y.push(x[i].innerHTML); 
-                } 
-              
-            });   
-           
-        </script>
-
+       
         <script id="dialogs">
             function setupDemoDialog(){
                 var dlg = $('#dialog_demo').dialog({
@@ -375,60 +363,73 @@
 
                     },
                     buttons: [
-                    {
-                        id: 'button_ok',
-                        text: 'Ok',
-                        click: function (capturar) {
-                            var argContents = document.getElementById('precio_dia').value;
-                            var objects = document.getElementsByClassName("day selected");
-                            var diadelanio = $(".selected").attr("data-dayofyear");
-                            var resumenDiv= document.getElementsByClassName("selected");
-                            var precioDiv = document.getElementsByClassName("verificacion");
-                            //var globalBoxes = document.getElementsByClassName("day selected");
+                        {
 
-                            console.log (argContents);
-                            console.log (diadelanio);
-                            console.log (resumenDiv);
-                            console.log (precioDiv);
-                            //console.log (globalBoxes);
-                            //console.log (contentDiv);
+                    /*BOTON OK*/
+                    id: 'button_ok',
+                    text: 'Ok',
+                    click: function (capturar) {
+                        var argContents = document.getElementById('precio_dia').value;
 
-                            $(function(){
-                                    for (var obj of objects) {                                         
-                                        $('#dias.selected').append('<div class="content verificacion" id="precio" dia="'+diadelanio+'">'+argContents+'</div>');
-                                        break;
-                                    }
-                                })
-                            
-                            $(document).ready(function(){ 
-                                 var y = []; 
-                                 x=$("div#dias").toArray(); 
-                                for (i=0;i<x.length;i++){ 
-                                        y.push(x[i].innerHTML);
-                                              
-                                } 
+                        $(document).ready(function () {
+                            var y = [];
+                            x = $("div#dias").toArray();
+                            for (i = 0; i < x.length; i++) {
+                                y.push(x[i].innerHTML);
                                
-                                console.log(y)
-                            });   
+                            }
+                        });
 
-                            // for (var i = 0; i < globalBoxes.children.length; i++) {
-                            //      var contentDiv = document.getElementsByClassName("content")[i];
-                                   
-                            // }
+                        x.forEach(elemento => {
+                          
+
+                            if (elemento.getAttribute("class") == "day selected" && elemento.getAttribute("bandera") == "true") {
+
+                                console.log(elemento);
+
+                                div.find("#precio").remove(argContents);
+                               
+                                //    var resultado = window.confirm('Desea cambiar el precio de este día?');
+
+                                //    var edad = prompt('Cuantos años tienes?', '100');
+
+                                //        if (resultado === true) {
+                                //            window.alert('Okay, si estas seguro.');
+                                //            $('[class="day selected"][bandera="false"]').remove('<div class="content" id="precio">' + argContents + '</div>');
+                                //            $('.selected').attr('bandera', 'false');
+                                //        } else {
+                                //            window.alert('Pareces indeciso');
+
+                                //    }
+                                //    $('[class="day selected"][bandera="false"]').append('<div class="content" id="precio">' + argContents + '</div>');
+
+                                //} else {
+                            }
+                                 $('[class="day selected"][bandera="false"]').append('<div class="content" id="precio">' + argContents + '</div>');
+                                 $('.selected').attr('bandera', 'true');
+                                    
+                                
                             
-                            
-                            $(this).dialog('close');                           
-                        }                         
+
+                        });
+                           
+                       
+                        $(this).dialog('close');
+                      }
                     },
+
+                    /*BOTON CERRAR*/
                     {
-                        id: 'button_Close',
-                        text: 'Close',
-                        click: function () {
-                            $(this).dialog('close');
-                        }
+                    id: 'button_Close',
+                    text: 'Close',
+                    click: function () {
+                        $(this).dialog('close');
                     }
+                  }
                 ]
             });
+
+
             dlg.parent().appendTo(jQuery("body:first"));
         }
 
