@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -10,8 +10,8 @@
     <script src="https://sys-static-content.s3.amazonaws.com/scripts/jqueryui-1.12.0/jquery-ui.min.js"></script>
 
     <link href="https://www.rentalbookingsystem.com/styles.css" type="text/css" rel="stylesheet" />
-    <link href="https://sys-static-content.s3.amazonaws.com/css/jquery-ui-1.12.0/smoothness/jquery-ui.min.css" rel="stylesheet" >
-    
+    <link href="https://sys-static-content.s3.amazonaws.com/css/jquery-ui-1.12.0/smoothness/jquery-ui.min.css" rel="stylesheet">
+
     <title>Calendario</title>
     <style>
         @import url(https://fonts.googleapis.com/css?family=Muli:300,400,600,700);
@@ -20,10 +20,11 @@
             font-family: "Muli", sans-serif;
             user-select: none;
         }
-        
-        a{
+
+        a {
             padding: 50px;
         }
+
         .months {
             display: flex;
             flex-direction: row;
@@ -64,21 +65,17 @@
 
         .header,
         .title,
-        .content{
+        .content {
             text-align: center;
         }
 
-        
+
         .content {
             font-size: 10px;
         }
 
         .day.disabled {
-            background: repeating-linear-gradient(20deg,
-                rgb(243 243 243),
-                rgb(243 243 243) 10px,
-                #ffffff 10px,
-                #ffffff 20px);
+            background: repeating-linear-gradient(20deg, rgb(243 243 243), rgb(243 243 243) 10px, #ffffff 10px, #ffffff 20px);
         }
 
         .day.selected {
@@ -93,7 +90,7 @@
             color: black; /* #ffffff; /* Color del texto */
             border-radius: 5px; /* Borde del boton */
             letter-spacing: 2px; /* Espacio entre letras */
-            background-color: palegreen;/* #E91E63; /* Color de fondo */
+            background-color: palegreen; /* #E91E63; /* Color de fondo */
             padding: 18px 30px; /* Relleno del boton */
             bottom: 40px;
             right: 40px;
@@ -103,10 +100,11 @@
         }
 
         .btn:hover {
-            background-color: palegreen;/* #2c2fa5; /* Color de fondo al pasar el cursor */
+            background-color: palegreen; /* #2c2fa5; /* Color de fondo al pasar el cursor */
             box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
             transform: translateY(-7px);
         }
+
         @media only screen and (max-width: 600px) {
             .btn {
                 font-size: 14px;
@@ -114,7 +112,7 @@
                 bottom: 20px;
                 right: 20px;
             }
-        } 
+        }
 
         /* MODAL*/
         .modal-container {
@@ -125,19 +123,19 @@
             position: fixed;
             pointer-events: none;
             opacity: 0;
-            top:0;
+            top: 0;
             left: 0;
             height: 100vh;
             width: 100vw;
         }
 
-        .show{
+        .show {
             pointer-events: auto;
             opacity: 1;
         }
 
-        .modal{
-            background-color:#fff;
+        .modal {
+            background-color: #fff;
             width: 600px;
             max-width: 100%;
             padding: 30px 50px;
@@ -146,10 +144,9 @@
             text-align: center;
         }
 
-        a #guardar{
+        a #guardar {
             align-content: center;
         }
-
     </style>
 </head>
 
@@ -170,9 +167,27 @@
         </div>
     </div>
     <p><a href="#" onclick="return openDemoDialog();">Definir Precio</a></p>
+    <br />
+    <hr />
+    <div>
+        <label id=""><input type="checkbox" name="precios" value="Precios" />Precio</label>
+        <br />
+        <hr />
+        <label><input type="checkbox" name="estanciaMin" value="Estancia Minima" />Estancia Minima</label>
+        <br />
+        <hr />
+        <label><input type="checkbox" name="estanciaMax" value="Estancia Maxima" />Estancia Maxima</label>
+        <br />
+        <hr />
+        <label><input type="checkbox" name="entrada" value="Dia de entrada" />Día de Ingreso</label>
+        <br />
+        <hr />
+        <button class="btn-flotante" id="finalizar" onclick="finalizar()">Finalizar</button>
+    </div>
+
 
     <script id="main">
-        var preciofijado = '';
+        var precio = '';
         $(document).ready(function () {
             moment.locale('es-es');
             //console.log(moment.localeData()._weekdaysMin);
@@ -180,11 +195,11 @@
             $('body').prepend(createYear(2023));
             clearSelection();
         });
-        $(window).load(function(){
+        $(window).load(function () {
             setupDemoDialog();
         });
     </script>
-    
+
     <script id="builder">
         const blankSpace = '&nbsp;';
         const divElement = '<div></div>';
@@ -207,79 +222,79 @@
             var monthDate = moment(`${argYear}-${argMonth + 1}-01`);
             var workingMonthHeader = createDiv('header');
             workingMonthHeader
-            .append(monthDate.format('MMMM'))
-            .attr('data-month', argMonth + 1)
-            .on('click', function (argEventData) {
-                selectMonth($(this).attr('data-month'), argEventData);
-        });
-        var workingMonth = createDiv('month').append(workingMonthHeader);
+                .append(monthDate.format('MMMM'))
+                .attr('data-month', argMonth + 1)
+                .on('click', function (argEventData) {
+                    selectMonth($(this).attr('data-month'), argEventData);
+                });
+            var workingMonth = createDiv('month').append(workingMonthHeader);
 
-        //agregar fila de nombres de dias de la semana
-        var weekDaysHeader = createWeekHeadersRow();
-        const dayNames = moment.localeData()._weekdaysMin;
-        const firstDay = moment.localeData()._config.week.dow;
-        var weekDay = 0;
-        weekDaysHeader.append(createEmptyWeekHeaderDay());
-        weekDaysHeader.append(createWeekHeaderDay(firstDay, argMonth + 1));
-        for (weekDay = firstDay + 1; weekDay !== firstDay; weekDay = (weekDay + 1) % 7) {
-            weekDaysHeader.append(createWeekHeaderDay(weekDay, argMonth + 1));
-        }
-        workingMonth.append(weekDaysHeader);
+            //agregar fila de nombres de dias de la semana
+            var weekDaysHeader = createWeekHeadersRow();
+            const dayNames = moment.localeData()._weekdaysMin;
+            const firstDay = moment.localeData()._config.week.dow;
+            var weekDay = 0;
+            weekDaysHeader.append(createEmptyWeekHeaderDay());
+            weekDaysHeader.append(createWeekHeaderDay(firstDay, argMonth + 1));
+            for (weekDay = firstDay + 1; weekDay !== firstDay; weekDay = (weekDay + 1) % 7) {
+                weekDaysHeader.append(createWeekHeaderDay(weekDay, argMonth + 1));
+            }
+            workingMonth.append(weekDaysHeader);
 
-                //agregar dias al mes
-                while (monthDate.month() == argMonth) {
-                    weekDay = 0;
-                    var weekDaysRowHeader = createDiv('header day');
-                    weekDaysRowHeader
+            //agregar dias al mes
+            while (monthDate.month() == argMonth) {
+                weekDay = 0;
+                var weekDaysRowHeader = createDiv('header day');
+                weekDaysRowHeader
                     .append(monthDate.isoWeek())
                     .attr('data-week', monthDate.isoWeek())
                     .on('click', function (argEventData) {
                         selectWeek($(this).attr('data-week'), argEventData);
                     });
-                    var weekDaysRow = createWeekDaysRow().append(weekDaysRowHeader);
-                    weekDaysRow.append(createDiv());
-                    while (weekDay < 7 && monthDate.month() == argMonth) {
-                        while (monthDate.weekday() != weekDay) {
-                            weekDaysRow.append(createEmptyDay());
-                            weekDay++;
-                        }
-                        weekDaysRow.append(createDay(monthDate));
-                        weekDay++;
-                        monthDate.add(1, 'd');
-                    }
-                    while (weekDay < 7) {
+                var weekDaysRow = createWeekDaysRow().append(weekDaysRowHeader);
+                weekDaysRow.append(createDiv());
+                while (weekDay < 7 && monthDate.month() == argMonth) {
+                    while (monthDate.weekday() != weekDay) {
                         weekDaysRow.append(createEmptyDay());
                         weekDay++;
                     }
-                    workingMonth.append(weekDaysRow);
+                    weekDaysRow.append(createDay(monthDate));
+                    weekDay++;
+                    monthDate.add(1, 'd');
                 }
-                return workingMonth;
+                while (weekDay < 7) {
+                    weekDaysRow.append(createEmptyDay());
+                    weekDay++;
+                }
+                workingMonth.append(weekDaysRow);
             }
-            function createWeekHeadersRow() {
-                return createDiv('week headers');
-            }
-            function createWeekDaysRow() {
-                return createDiv('week days');
-            }
-            function createWeekHeaderDay(argWeekDay, argMonth) {
-                var weekDayElement = createDiv('header day');
-                weekDayElement
+            return workingMonth;
+        }
+        function createWeekHeadersRow() {
+            return createDiv('week headers');
+        }
+        function createWeekDaysRow() {
+            return createDiv('week days');
+        }
+        function createWeekHeaderDay(argWeekDay, argMonth) {
+            var weekDayElement = createDiv('header day');
+            weekDayElement
                 .append(moment.localeData()._weekdaysMin[argWeekDay])
                 .attr('data-weekday', argWeekDay)
                 .attr('data-month', argMonth)
                 .on('click', function (argEventData) {
                     selectWeekDay($(this).attr('data-weekday'), $(this).attr('data-month'), argEventData);
-                        //console.log(selectWeekDay);
-                    });
+                    //console.log(selectWeekDay);
+                });
 
-                return weekDayElement;
-            }
-            function createEmptyWeekHeaderDay() {
-                return createDiv('header day').append(blankSpace);
-            }
-            function createDay(argDate) {
-                var dayElement = createDiv('day');
-                dayElement
+            return weekDayElement;
+        }
+        function createEmptyWeekHeaderDay() {
+            return createDiv('header day').append(blankSpace);
+        }
+        function createDay(argDate) {
+            var dayElement = createDiv('day');
+            dayElement
                 .attr('id', 'dias')
                 .attr('data-day', argDate.date())
                 .attr('data-month', argDate.month() + 1)
@@ -287,25 +302,29 @@
                 .attr('data-week', argDate.isoWeek())
                 .attr('data-weekday', argDate.day())
                 .attr('data-dayofyear', argDate.dayOfYear())
-                .attr('bandera','false');
+                .attr('data-bandera', 'false');
 
-                dayElement
+            dayElement
                 .append(createDayTitle(argDate))
+                //.append(createDayContents(precio).attr('id', 'pre'))
                 .on('click', function (argEventData) {
-                    selectDay( $(this).attr('data-dayofyear'), argEventData);
-                }); 
-                return dayElement;
-            }
-            function createDayTitle(argDate) {
-                return createDiv('title').append(argDate.format('D'));
-            }
-            function createEmptyDay() {
-                return createDiv('day disabled').append(createDiv('title')).append(createDiv('content'));
-            }
-        </script>
+                    selectDay($(this).attr('data-dayofyear'), argEventData);
+                });
+            return dayElement;
+        }
+        //function createDayContents(argContents) {
+        //    return createDiv('content').append(argContents);
+        //}
+        function createDayTitle(argDate) {
+            return createDiv('title').append(argDate.format('D'));
+        }
+        function createEmptyDay() {
+            return createDiv('day disabled').append(createDiv('title')).append(createDiv('content'));
+        }
+    </script>
 
-        <script id="selections">
-         class clsSelection {
+    <script id="selections">
+        class clsSelection {
             #dates;
             constructor() {
                 this.#dates = [];
@@ -327,119 +346,103 @@
             if (!argEventData.ctrlKey) { clearSelection(); }
             $(`div.day[data-month="${argMonth}"]`).addClass('selected').each(function (i, e) {
                 currentSelection.add(new Date($(e).attr('data-year'), $(e).attr('data-month'), $(e).attr('data-day')));
-            });      
-                //console.log(currentSelection);
-            }
-            function selectWeek(argWeek, argEventData) {
-                if (!argEventData.ctrlKey) { clearSelection(); }
-                $(`div.day[data-week="${argWeek}"]`).addClass('selected');
+            });
+            //console.log(currentSelection);
+        }
+        function selectWeek(argWeek, argEventData) {
+            if (!argEventData.ctrlKey) { clearSelection(); }
+            $(`div.day[data-week="${argWeek}"]`).addClass('selected');
 
-            }
-            function selectWeekDay(argWeekDay, argMonth, argEventData) {
-                if (!argEventData.ctrlKey) { clearSelection(); }
-                $(`div.day[data-weekday="${argWeekDay}"][data-month="${argMonth}"]`).addClass('selected');
-            }
-            function selectDay(argDate, argEventData) {
-                if (!argEventData.ctrlKey) { clearSelection(); }
-                $(`div.day[data-dayofyear="${argDate}"]`).addClass('selected');
-                
-            } 
+        }
+        function selectWeekDay(argWeekDay, argMonth, argEventData) {
+            if (!argEventData.ctrlKey) { clearSelection(); }
+            $(`div.day[data-weekday="${argWeekDay}"][data-month="${argMonth}"]`).addClass('selected');
+        }
+        function selectDay(argDate, argEventData) {
+            if (!argEventData.ctrlKey) { clearSelection(); }
+            $(`div.day[data-dayofyear="${argDate}"]`).addClass('selected');
+        }
+    </script>
 
-        </script> 
-       
-        <script id="dialogs">
-            function setupDemoDialog(){
-                var dlg = $('#dialog_demo').dialog({
-                    autoOpen: false,
-                    height: 'auto',
-                    width: 900,
-                    modal: true,
-                    resizable: false,
-                    draggable: true,
-                    open: function (event, ui) {
+    <script id="dialogs">
+        function setupDemoDialog() {
+            var dlg = $('#dialog_demo').dialog({
+                autoOpen: false,
+                height: 'auto',
+                width: 900,
+                modal: true,
+                resizable: false,
+                draggable: true,
+                open: function (event, ui) {
 
-                    },
-                    close: function (event, ui) {
+                },
+                close: function (event, ui) {
 
-                    },
-                    buttons: [
-                        {
+                },
+                buttons: [
+                    {
 
-                    /*BOTON OK*/
-                    id: 'button_ok',
-                    text: 'Ok',
-                    click: function (capturar) {
-                        var argContents = document.getElementById('precio_dia').value;
-
-                        $(document).ready(function () {
-                            var y = [];
-                            x = $("div#dias").toArray();
-                            for (i = 0; i < x.length; i++) {
-                                y.push(x[i].innerHTML);
-                               
-                            }
-                        });
-
-                        x.forEach(elemento => {
-                          
-
-                            if (elemento.getAttribute("class") == "day selected" && elemento.getAttribute("bandera") == "true") {
-
-                                console.log(elemento);
-
-                                div.find("#precio").remove(argContents);
-                               
-                                //    var resultado = window.confirm('Desea cambiar el precio de este día?');
-
-                                //    var edad = prompt('Cuantos años tienes?', '100');
-
-                                //        if (resultado === true) {
-                                //            window.alert('Okay, si estas seguro.');
-                                //            $('[class="day selected"][bandera="false"]').remove('<div class="content" id="precio">' + argContents + '</div>');
-                                //            $('.selected').attr('bandera', 'false');
-                                //        } else {
-                                //            window.alert('Pareces indeciso');
-
-                                //    }
-                                //    $('[class="day selected"][bandera="false"]').append('<div class="content" id="precio">' + argContents + '</div>');
-
-                                //} else {
-                            }
-                                 $('[class="day selected"][bandera="false"]').append('<div class="content" id="precio">' + argContents + '</div>');
-                                 $('.selected').attr('bandera', 'true');
-                                    
-                                
+                        /*BOTON OK*/
+                        id: 'button_ok',
+                        text: 'Ok',
+                        click: function (capturar) {
+                            let argContents = document.getElementById('precio_dia').value;
+                            let diadelanio = $(".selected").attr("data-dayofyear");
                             
 
-                        });
+                            console.log($('[class="day selected"][data-bandera="false"]'));
                            
-                       
-                        $(this).dialog('close');
-                      }
-                    },
 
-                    /*BOTON CERRAR*/
-                    {
+
+                            $('[class="day selected"]').append('<div class="content" id="precio" dia="' + diadelanio + '">' + argContents + '</div>');
+                            $('.selected').attr('data-bandera', 'true');
+
+                            
+                            //xxx = $('#precio.content').toArray();
+                           //console.log(xxx);
+
+                           
+
+                            $(this).dialog('close');
+
+                    }
+
+                },
+
+                /*BOTON CERRAR*/
+                {
                     id: 'button_Close',
                     text: 'Close',
                     click: function () {
                         $(this).dialog('close');
                     }
-                  }
-                ]
-            });
+                }
+                        ]
+        });
+        dlg.parent().appendTo(jQuery("body:first"));
+                }
 
-
-            dlg.parent().appendTo(jQuery("body:first"));
-        }
-
-        function openDemoDialog(){
+        function openDemoDialog() {
             $('#dialog_demo').dialog('open');
             return false;
         }
-
-                            
     </script>
-        
-</body>
 
+    <script>
+        function finalizar() {
+
+            const finalizar = document.getElementById("finalizar");
+
+
+            x = $("#dias.day").toArray();
+            console.log(x);
+            xxx = $('#precio.content').toArray();
+            console.log(xxx);
+            
+        }
+
+
+    </script>
+
+    <script>
+       
