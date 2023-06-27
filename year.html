@@ -388,9 +388,17 @@
                         click: function (capturar) {
                             let argContents = document.getElementById('precio_dia').value;
                             let diadelanio = $(".selected").attr("data-dayofyear");
-                            
 
-                            console.log($('[class="day selected"][data-bandera="false"]'));
+                            var y = [];
+                            x = $("div#dias").toArray();
+                            for (i = 0; i < x.length; i++) {
+                                y.push(x[i].innerHTML);
+                               
+                            }
+                            
+                            console.log(y);
+                            console.log(x);
+                           
                            
 
 
@@ -434,8 +442,8 @@
             const finalizar = document.getElementById("finalizar");
 
 
-            x = $("#dias.day").toArray();
-            console.log(x);
+            //x = $("#dias.day").toArray();
+            //console.log(x);
             xxx = $('#precio.content').toArray();
             console.log(xxx);
             
