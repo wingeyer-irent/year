@@ -384,18 +384,20 @@
                             let argContents = document.getElementById('precio_dia').value;
                             let diadelanio = $(".selected").attr("data-dayofyear");
                             console.log(diadelanio);
-                            var y = [];
                             x = $("div#dias.selected").toArray();
                             for (i = 0; i < x.length; i++) {
-                                y.push(x[i].innerHTML);
-                               
+                                console.log(x[i].getAttribute("data-dayofyear"));
+                                if($('[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]').find('#precio').length){
+                                    console.log("existe");
+                                }else{
+                                    $('[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]').append('<div class="content" id="precio" >' + argContents + '</div>');
+                                }
                             }
                             
-                            console.log(y);
-                            console.log(x);
+                            console.log(x[0]);
 
-                            $('[class="day selected"]').append('<div class="content" id="precio" dia="' + diadelanio + '">' + argContents + '</div>');
-                            $('.selected').attr('data-bandera', 'true');
+                          //$('[class="day selected"]').append('<div class="content" id="precio" dia="' + diadelanio + '">' + argContents + '</div>');
+                           // $('.selected').attr('data-bandera', 'true');
                             
                             //xxx = $('#precio.content').toArray();
                            //console.log(xxx);
