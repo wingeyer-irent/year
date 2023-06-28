@@ -306,15 +306,15 @@
 
             dayElement
                 .append(createDayTitle(argDate))
-                //.append(createDayContents(precio).attr('id', 'pre'))
+                .append(createDayContents(precio).attr('id', 'precio').attr('data-day',argDate.dayOfYear()))
                 .on('click', function (argEventData) {
                     selectDay($(this).attr('data-dayofyear'), argEventData);
                 });
             return dayElement;
         }
-        //function createDayContents(argContents) {
-        //    return createDiv('content').append(argContents);
-        //}
+        function createDayContents(argContents) {
+            return createDiv('content').append(argContents);
+        }
         function createDayTitle(argDate) {
             return createDiv('title').append(argDate.format('D'));
         }
@@ -387,18 +387,14 @@
                         text: 'Ok',
                         click: function (capturar) {
                             let argContents = document.getElementById('precio_dia').value;
-                            let diadelanio = $(".selected").attr("data-dayofyear");
-
+                           
                             var y = [];
                             x = $("div#dias.selected").toArray();
-
                             console.log(x);
-                            $('[class="day selected"]').append('<div class="content" id="precio" dia="' + diadelanio + '">' + argContents + '</div>');
-                            $('.selected').attr('data-bandera', 'true');
-                                                  
-                            
-                            //xxx = $('#precio.content').toArray();
-                           //console.log(xxx);
+
+                            for (i=0;i<x.length;i++){
+                                $('#precio').html(argContents); 
+                            } 
 
                             $(this).dialog('close');
 
