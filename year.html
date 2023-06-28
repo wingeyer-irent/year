@@ -382,25 +382,14 @@
                         text: 'Ok',
                         click: function (capturar) {
                             let argContents = document.getElementById('precio_dia').value;
-                            let diadelanio = $(".selected").attr("data-dayofyear");
-                            console.log(diadelanio);
                             x = $("div#dias.selected").toArray();
                             for (i = 0; i < x.length; i++) {
-                                console.log(x[i].getAttribute("data-dayofyear"));
                                 if($('[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]').find('#precio').length){
-                                    console.log("existe");
+                                    $('[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]').find('#precio').text(argContents);
                                 }else{
                                     $('[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]').append('<div class="content" id="precio" >' + argContents + '</div>');
                                 }
                             }
-                            
-                            console.log(x[0]);
-
-                          //$('[class="day selected"]').append('<div class="content" id="precio" dia="' + diadelanio + '">' + argContents + '</div>');
-                           // $('.selected').attr('data-bandera', 'true');
-                            
-                            //xxx = $('#precio.content').toArray();
-                           //console.log(xxx);
 
                             $(this).dialog('close');
                         }
