@@ -390,7 +390,7 @@
                             let diadelanio = $(".selected").attr("data-dayofyear");
 
                             var y = [];
-                            x = $("div#dias").toArray();
+                            x = $("div#dias.selected").toArray();
                             for (i = 0; i < x.length; i++) {
                                 y.push(x[i].innerHTML);
                                
@@ -398,18 +398,16 @@
                             
                             console.log(y);
                             console.log(x);
-                           
+
+                            
                            
 
 
                             $('[class="day selected"]').append('<div class="content" id="precio" dia="' + diadelanio + '">' + argContents + '</div>');
                             $('.selected').attr('data-bandera', 'true');
-
                             
                             //xxx = $('#precio.content').toArray();
                            //console.log(xxx);
-
-                           
 
                             $(this).dialog('close');
 
@@ -441,9 +439,8 @@
 
             const finalizar = document.getElementById("finalizar");
 
-
-            //x = $("#dias.day").toArray();
-            //console.log(x);
+            x = $("#dias.day").toArray();
+            console.log(x);
             xxx = $('#precio.content').toArray();
             console.log(xxx);
             
@@ -452,5 +449,5 @@
 
     </script>
 
-    <script>
+</body>
        
