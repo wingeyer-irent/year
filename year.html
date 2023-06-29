@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+?<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -182,7 +182,7 @@
         <label><input type="checkbox" name="entrada" value="Dia de entrada" />Día de Ingreso</label>
         <br />
         <hr />
-        <button class="btn-flotante" id="finalizar" onclick="finalizar()">Finalizar</button>
+        <!-- <button class="btn-flotante" id="finalizar" onclick="finalizar()">Finalizar</button> -->
     </div>
 
 
@@ -306,14 +306,10 @@
 
             dayElement
                 .append(createDayTitle(argDate))
-                .append(createDayContents(precio).attr('id', 'precio').attr('data-day',argDate.dayOfYear()))
                 .on('click', function (argEventData) {
                     selectDay($(this).attr('data-dayofyear'), argEventData);
                 });
             return dayElement;
-        }
-        function createDayContents(argContents) {
-            return createDiv('content').append(argContents);
         }
         function createDayTitle(argDate) {
             return createDiv('title').append(argDate.format('D'));
@@ -373,68 +369,50 @@
                 modal: true,
                 resizable: false,
                 draggable: true,
-                open: function (event, ui) {
-
-                },
-                close: function (event, ui) {
-
-                },
+                open: function (event, ui) {},
+                close: function (event, ui) {},
                 buttons: [
                     {
+                    /*BOTON OK*/
+                    id: 'button_ok',
+                    text: 'Ok',
+                    click: function (capturar) {
+                        let argContents = document.getElementById('precio_dia').value;
+                        x = $("div#dias.selected").toArray();
+                    
+                        for (i = 0; i < x.length; i++) {
+                            let diadelanio =x[i].getAttribute("data-dayofyear");
+                            if($('[data-dayofyear="'+diadelanio + '"]').find('#precio').length){
+                                $('[data-dayofyear="'+diadelanio + '"]').find('#precio').text(argContents);
+                            }else{
+                                $('[data-dayofyear="'+diadelanio + '"]').append('<div class="content" id="precio">' + argContents + '</div>');
+                            }
+                        }
 
-                        /*BOTON OK*/
-                        id: 'button_ok',
-                        text: 'Ok',
-                        click: function (capturar) {
-                            let argContents = document.getElementById('precio_dia').value;
-                           
-                            var y = [];
-                            x = $("div#dias.selected").toArray();
-                            console.log(x);
-
-                            for (i=0;i<x.length;i++){
-                                $('#precio').html(argContents); 
-                            } 
-
-                            $(this).dialog('close');
-
-                    }
-
-                },
-
-                /*BOTON CERRAR*/
-                {
-                    id: 'button_Close',
-                    text: 'Close',
-                    click: function () {
                         $(this).dialog('close');
-                    }
-                }
-                        ]
-        });
-        dlg.parent().appendTo(jQuery("body:first"));
-                }
+                        }
+                    },
 
+                    /*BOTON CERRAR*/
+                    {
+                        id: 'button_Close',
+                        text: 'Close',
+                        click: function () {
+                            $(this).dialog('close');
+                        }
+                    }
+                ]
+            });
+            dlg.parent().appendTo(jQuery("body:first"));
+        }
+        
         function openDemoDialog() {
             $('#dialog_demo').dialog('open');
             return false;
         }
     </script>
 
-    <script>
-        function finalizar() {
-
-            const finalizar = document.getElementById("finalizar");
-
-            x = $("#dias.day").toArray();
-            console.log(x);
-            xxx = $('#precio.content').toArray();
-            console.log(xxx);
-            
-        }
-
-
-    </script>
+    
 
 </body>
        
