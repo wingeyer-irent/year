@@ -2,432 +2,455 @@
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
-<head>
-    <meta charset="utf-8" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="https://sys-static-content.s3.amazonaws.com/scripts/momentjs-2.18.1/moment-with-locales.min.js"></script>
+    <head>
+        <meta charset="utf-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script src="https://sys-static-content.s3.amazonaws.com/scripts/momentjs-2.18.1/moment-with-locales.min.js"></script>
+        <script src="https://sys-static-content.s3.amazonaws.com/scripts/jqueryui-1.12.0/jquery-ui.min.js"></script>
 
-    <script src="https://sys-static-content.s3.amazonaws.com/scripts/jqueryui-1.12.0/jquery-ui.min.js"></script>
+        <link href="https://www.rentalbookingsystem.com/styles.css" type="text/css" rel="stylesheet" />
+        <link href="https://sys-static-content.s3.amazonaws.com/css/jquery-ui-1.12.0/smoothness/jquery-ui.min.css" rel="stylesheet">
 
-    <link href="https://www.rentalbookingsystem.com/styles.css" type="text/css" rel="stylesheet" />
-    <link href="https://sys-static-content.s3.amazonaws.com/css/jquery-ui-1.12.0/smoothness/jquery-ui.min.css" rel="stylesheet">
+        <title>Calendario</title>
+        <style>
+            @import url(https://fonts.googleapis.com/css?family=Muli:300,400,600,700);
 
-    <title>Calendario</title>
-    <style>
-        @import url(https://fonts.googleapis.com/css?family=Muli:300,400,600,700);
-
-        body {
-            font-family: "Muli", sans-serif;
-            user-select: none;
-        }
-
-        a {
-            padding: 50px;
-        }
-
-        .months {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-content: center;
-            align-items: flex-start;
-            justify-content: space-evenly;
-        }
-
-        .week {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-content: center;
-            justify-content: space-evenly;
-            align-items: stretch;
-        }
-
-        .day {
-            width: 60px;
-        }
-
-        .header {
-            text-transform: capitalize;
-        }
-
-        .months .month .header {
-            font-size: 14px;
-            background-color: lightgray;
-            cursor: pointer;
-        }
-
-        .months .month .week .header {
-            font-size: 12px;
-            background-color: palegreen;
-            cursor: pointer;
-        }
-
-        .header,
-        .title,
-        .content {
-            text-align: center;
-        }
-
-
-        .content {
-            font-size: 10px;
-        }
-
-        .day.disabled {
-            background: repeating-linear-gradient(20deg, rgb(243 243 243), rgb(243 243 243) 10px, #ffffff 10px, #ffffff 20px);
-        }
-
-        .day.selected {
-            background-color: lightpink;
-        }
-
-        /* BOTONES*/
-        .btn-flotante {
-            font-size: 16px; /* Cambiar el tamaño de la tipografia */
-            text-transform: uppercase; /* Texto en mayusculas */
-            font-weight: bold; /* Fuente en negrita o bold */
-            color: black; /* #ffffff; /* Color del texto */
-            border-radius: 5px; /* Borde del boton */
-            letter-spacing: 2px; /* Espacio entre letras */
-            background-color: palegreen; /* #E91E63; /* Color de fondo */
-            padding: 18px 30px; /* Relleno del boton */
-            bottom: 40px;
-            right: 40px;
-            transition: all 300ms ease 0ms;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-            z-index: 99;
-        }
-
-        .btn:hover {
-            background-color: palegreen; /* #2c2fa5; /* Color de fondo al pasar el cursor */
-            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
-            transform: translateY(-7px);
-        }
-
-        @media only screen and (max-width: 600px) {
-            .btn {
-                font-size: 14px;
-                padding: 12px 20px;
-                bottom: 20px;
-                right: 20px;
+            body {
+                font-family: "Muli", sans-serif;
+                user-select: none;
             }
-        }
 
-        /* MODAL*/
-        .modal-container {
-            display: flex;
-            background-color: rgba(0,0,0,0.2);
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            pointer-events: none;
-            opacity: 0;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 100vw;
-        }
+            #btn_price {
+                margin-left: 50px;
+            }
 
-        .show {
-            pointer-events: auto;
-            opacity: 1;
-        }
+            .months {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-content: center;
+                align-items: flex-start;
+                justify-content: space-evenly;
+            }
 
-        .modal {
-            background-color: #fff;
-            width: 600px;
-            max-width: 100%;
-            padding: 30px 50px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            text-align: center;
-        }
+            .week {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-content: center;
+                justify-content: space-evenly;
+                align-items: stretch;
+            }
 
-        a #guardar {
-            align-content: center;
-        }
-    </style>
-</head>
+            .day {
+                width: 60px;
+            }
 
-<body>
+            .header {
+                text-transform: capitalize;
+            }
 
-    <div id="dialog_demo" class="ui-helper-hidden" title="Establecer el Precio">
-        <div class="flexdialog">
-            <div>
-                <i class="icon-users-1 big"></i>
-            </div>
-            <div>
-                <p>Definir Precio</p>
-                <form action="">
-                    <label> Ingrese el Precio por día:</label>
-                    <input type="text" name="" id="precio_dia">
-                </form>
+            .months .month .header {
+                font-size: 14px;
+                background-color: lightgray;
+                cursor: pointer;
+            }
+
+            .months .month .week .header {
+                font-size: 12px;
+                background-color: palegreen;
+                cursor: pointer;
+            }
+
+            .header,
+            .title,
+            .content {
+                text-align: center;
+            }
+
+
+            .content {
+                font-size: 10px;
+            }
+
+            .day.disabled {
+                background: repeating-linear-gradient(20deg, rgb(243 243 243), rgb(243 243 243) 10px, #ffffff 10px, #ffffff 20px);
+            }
+
+            .day.selected {
+                background-color: lightpink;
+            }
+
+            /* BOTONES*/
+            .btn-flotante {
+                font-size: 16px; /* Cambiar el tamaño de la tipografia */
+                text-transform: uppercase; /* Texto en mayusculas */
+                font-weight: bold; /* Fuente en negrita o bold */
+                color: black; /* #ffffff; /* Color del texto */
+                border-radius: 5px; /* Borde del boton */
+                letter-spacing: 2px; /* Espacio entre letras */
+                background-color: palegreen; /* #E91E63; /* Color de fondo */
+                padding: 18px 30px; /* Relleno del boton */
+                bottom: 40px;
+                right: 40px;
+                transition: all 300ms ease 0ms;
+                box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+                z-index: 99;
+            }
+
+            .btn:hover {
+                background-color: palegreen; /* #2c2fa5; /* Color de fondo al pasar el cursor */
+                box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
+                transform: translateY(-7px);
+            }
+
+            @media only screen and (max-width: 600px) {
+                .btn {
+                    font-size: 14px;
+                    padding: 12px 20px;
+                    bottom: 20px;
+                    right: 20px;
+                }
+            }
+
+            /* MODAL*/
+            .modal-container {
+                display: flex;
+                background-color: rgba(0,0,0,0.2);
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                pointer-events: none;
+                opacity: 0;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 100vw;
+            }
+
+            .show {
+                pointer-events: auto;
+                opacity: 1;
+            }
+
+            .modal {
+                background-color: #fff;
+                width: 600px;
+                max-width: 100%;
+                padding: 30px 50px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                text-align: center;
+            }
+
+            a #guardar {
+                align-content: center;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div id="dialog_demo" class="ui-helper-hidden" title="Establecer el Precio">
+            <div class="flexdialog">
+                <div>
+                    <i class="icon-users-1 big"></i>
+                </div>
+                <div>
+                    <p>Definir Precio</p>
+                    <form action="">
+                        <label> Ingrese el Precio por día:</label>
+                        <input type="number" min="1" id="precio_dia">
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <p><a href="#" onclick="return openDemoDialog();">Definir Precio</a></p>
-    <br />
-    <hr />
-    <div>
-        <label id=""><input type="checkbox" name="precios" value="Precios" />Precio</label>
+        <p><a id="btn_price" href="#" onclick="return openDemoDialog();">Definir Precio</a></p>
         <br />
         <hr />
-        <label><input type="checkbox" name="estanciaMin" value="Estancia Minima" />Estancia Minima</label>
-        <br />
-        <hr />
-        <label><input type="checkbox" name="estanciaMax" value="Estancia Maxima" />Estancia Maxima</label>
-        <br />
-        <hr />
-        <label><input type="checkbox" name="entrada" value="Dia de entrada" />Día de Ingreso</label>
-        <br />
-        <hr />
-        <button class="btn-flotante" id="finalizar" onclick="finalizar()">Finalizar</button>
-    </div>
+        <div>
+            <label id=""><input type="checkbox" name="precios" value="Precios" />Precio</label>
+            <br />
+            <hr />
+            <label><input type="checkbox" name="estanciaMin" value="Estancia Minima" />Estancia Minima</label>
+            <br />
+            <hr />
+            <label><input type="checkbox" name="estanciaMax" value="Estancia Maxima" />Estancia Maxima</label>
+            <br />
+            <hr />
+            <label><input type="checkbox" name="entrada" value="Dia de entrada" />Día de Ingreso</label>
+            <br />
+            <hr />
+            <button class="btn-flotante" id="finalizar" onclick="finalizar()">Finalizar</button>
+        </div>
 
 
-    <script id="main">
-        var precio = '';
-        $(document).ready(function () {
-            moment.locale('es-es');
-            //console.log(moment.localeData()._weekdaysMin);
-            //console.log(moment.localeData()._config.week.dow);
-            $('body').prepend(createYear(2023));
-            clearSelection();
-        });
-        $(window).load(function () {
-            setupDemoDialog();
-        });
-    </script>
+        <script id="main">
+            var precio = '';
+            $(document).ready(function () {
+                moment.locale('es-es');
+                //console.log(moment.localeData()._weekdaysMin);
+                //console.log(moment.localeData()._config.week.dow);
+                $('body').prepend(createYear(2023));
+                clearSelection();
+            });
+            $(window).load(function () {
+                setupDemoDialog();
+            });
+        </script>
 
-    <script id="builder">
-        const blankSpace = '&nbsp;';
-        const divElement = '<div></div>';
+        <script id="builder">
+            const blankSpace = '&nbsp;';
+            const divElement = '<div></div>';
 
-        function createDiv(argClass) {
-            return $(divElement).addClass(argClass);
-        }
-
-        function createYear(argYear) {
-            var monthsContainer = createDiv('months');
-            var workingYear = createDiv('year').append(createDiv('header').append(argYear));
-            for (month = 0; month < 12; month++) {
-                monthsContainer.append(createMonth(argYear, month));
+            function createDiv(argClass) {
+                return $(divElement).addClass(argClass);
             }
-            workingYear.append(monthsContainer);
-            return workingYear;
-        }
 
-        function createMonth(argYear, argMonth) {
-            var monthDate = moment(`${argYear}-${argMonth + 1}-01`);
-            var workingMonthHeader = createDiv('header');
-            workingMonthHeader
-                .append(monthDate.format('MMMM'))
-                .attr('data-month', argMonth + 1)
-                .on('click', function (argEventData) {
-                    selectMonth($(this).attr('data-month'), argEventData);
-                });
-            var workingMonth = createDiv('month').append(workingMonthHeader);
-
-            //agregar fila de nombres de dias de la semana
-            var weekDaysHeader = createWeekHeadersRow();
-            const dayNames = moment.localeData()._weekdaysMin;
-            const firstDay = moment.localeData()._config.week.dow;
-            var weekDay = 0;
-            weekDaysHeader.append(createEmptyWeekHeaderDay());
-            weekDaysHeader.append(createWeekHeaderDay(firstDay, argMonth + 1));
-            for (weekDay = firstDay + 1; weekDay !== firstDay; weekDay = (weekDay + 1) % 7) {
-                weekDaysHeader.append(createWeekHeaderDay(weekDay, argMonth + 1));
+            function createYear(argYear) {
+                var monthsContainer = createDiv('months');
+                var workingYear = createDiv('year').append(createDiv('header').append(argYear));
+                for (month = 0; month < 12; month++) {
+                    monthsContainer.append(createMonth(argYear, month));
+                }
+                workingYear.append(monthsContainer);
+                return workingYear;
             }
-            workingMonth.append(weekDaysHeader);
 
-            //agregar dias al mes
-            while (monthDate.month() == argMonth) {
-                weekDay = 0;
-                var weekDaysRowHeader = createDiv('header day');
-                weekDaysRowHeader
-                    .append(monthDate.isoWeek())
-                    .attr('data-week', monthDate.isoWeek())
+            function createMonth(argYear, argMonth) {
+                var monthDate = moment(`${argYear}-${argMonth + 1}-01`);
+                var workingMonthHeader = createDiv('header');
+                workingMonthHeader
+                    .append(monthDate.format('MMMM'))
+                    .attr('data-month', argMonth + 1)
                     .on('click', function (argEventData) {
-                        selectWeek($(this).attr('data-week'), argEventData);
+                        selectMonth($(this).attr('data-month'), argEventData);
                     });
-                var weekDaysRow = createWeekDaysRow().append(weekDaysRowHeader);
-                weekDaysRow.append(createDiv());
-                while (weekDay < 7 && monthDate.month() == argMonth) {
-                    while (monthDate.weekday() != weekDay) {
+                var workingMonth = createDiv('month').append(workingMonthHeader);
+
+                //agregar fila de nombres de dias de la semana
+                var weekDaysHeader = createWeekHeadersRow();
+                const dayNames = moment.localeData()._weekdaysMin;
+                const firstDay = moment.localeData()._config.week.dow;
+                var weekDay = 0;
+                weekDaysHeader.append(createEmptyWeekHeaderDay());
+                weekDaysHeader.append(createWeekHeaderDay(firstDay, argMonth + 1));
+                for (weekDay = firstDay + 1; weekDay !== firstDay; weekDay = (weekDay + 1) % 7) {
+                    weekDaysHeader.append(createWeekHeaderDay(weekDay, argMonth + 1));
+                }
+                workingMonth.append(weekDaysHeader);
+
+                //agregar dias al mes
+                while (monthDate.month() == argMonth) {
+                    weekDay = 0;
+                    var weekDaysRowHeader = createDiv('header day');
+                    weekDaysRowHeader
+                        .append(monthDate.isoWeek())
+                        .attr('data-week', monthDate.isoWeek())
+                        .on('click', function (argEventData) {
+                            selectWeek($(this).attr('data-week'), argEventData);
+                        });
+                    var weekDaysRow = createWeekDaysRow().append(weekDaysRowHeader);
+                    weekDaysRow.append(createDiv());
+                    while (weekDay < 7 && monthDate.month() == argMonth) {
+                        while (monthDate.weekday() != weekDay) {
+                            weekDaysRow.append(createEmptyDay());
+                            weekDay++;
+                        }
+                        weekDaysRow.append(createDay(monthDate));
+                        weekDay++;
+                        monthDate.add(1, 'd');
+                    }
+                    while (weekDay < 7) {
                         weekDaysRow.append(createEmptyDay());
                         weekDay++;
                     }
-                    weekDaysRow.append(createDay(monthDate));
-                    weekDay++;
-                    monthDate.add(1, 'd');
+                    workingMonth.append(weekDaysRow);
                 }
-                while (weekDay < 7) {
-                    weekDaysRow.append(createEmptyDay());
-                    weekDay++;
+                return workingMonth;
+            }
+            function createWeekHeadersRow() {
+                return createDiv('week headers');
+            }
+            function createWeekDaysRow() {
+                return createDiv('week days');
+            }
+            function createWeekHeaderDay(argWeekDay, argMonth) {
+                var weekDayElement = createDiv('header day');
+                weekDayElement
+                    .append(moment.localeData()._weekdaysMin[argWeekDay])
+                    .attr('data-weekday', argWeekDay)
+                    .attr('data-month', argMonth)
+                    .on('click', function (argEventData) {
+                        selectWeekDay($(this).attr('data-weekday'), $(this).attr('data-month'), argEventData);
+                        //console.log(selectWeekDay);
+                    });
+
+                return weekDayElement;
+            }
+            function createEmptyWeekHeaderDay() {
+                return createDiv('header day').append(blankSpace);
+            }
+            function createDay(argDate) {
+                var dayElement = createDiv('day');
+                dayElement
+                    .attr('id', 'dias')
+                    .attr('data-day', argDate.date())
+                    .attr('data-month', argDate.month() + 1)
+                    .attr('data-year', argDate.year())
+                    .attr('data-week', argDate.isoWeek())
+                    .attr('data-weekday', argDate.day())
+                    .attr('data-dayofyear', argDate.dayOfYear())
+                    .attr('data-bandera', 'false');
+
+                dayElement
+                    .append(createDayTitle(argDate))
+                    //.append(createDayContents(precio).attr('id', 'pre'))
+                    .on('click', function (argEventData) {
+                        selectDay($(this).attr('data-dayofyear'), argEventData);
+                    });
+                return dayElement;
+            }
+            //function createDayContents(argContents) {
+            //    return createDiv('content').append(argContents);
+            //}
+            function createDayTitle(argDate) {
+                return createDiv('title').append(argDate.format('D'));
+            }
+            function createEmptyDay() {
+                return createDiv('day disabled').append(createDiv('title')).append(createDiv('content'));
+            }
+        </script>
+
+        <script id="selections">
+            class clsSelection {
+                #dates;
+                constructor() {
+                    this.#dates = [];
                 }
-                workingMonth.append(weekDaysRow);
+                add(argDate) {
+                    this.#dates.push(argDate);
+                }
             }
-            return workingMonth;
-        }
-        function createWeekHeadersRow() {
-            return createDiv('week headers');
-        }
-        function createWeekDaysRow() {
-            return createDiv('week days');
-        }
-        function createWeekHeaderDay(argWeekDay, argMonth) {
-            var weekDayElement = createDiv('header day');
-            weekDayElement
-                .append(moment.localeData()._weekdaysMin[argWeekDay])
-                .attr('data-weekday', argWeekDay)
-                .attr('data-month', argMonth)
-                .on('click', function (argEventData) {
-                    selectWeekDay($(this).attr('data-weekday'), $(this).attr('data-month'), argEventData);
-                    //console.log(selectWeekDay);
+            var currentSelection;
+
+            function clearSelection() {
+                currentSelection = new clsSelection();
+                $('div.day').removeClass('selected');
+            }
+            function beginSelection() { }
+            function endSelection() { }
+
+            function selectMonth(argMonth, argEventData) {
+                if (!argEventData.ctrlKey) { clearSelection(); }
+                $(`div.day[data-month="${argMonth}"]`).addClass('selected').each(function (i, e) {
+                    currentSelection.add(new Date($(e).attr('data-year'), $(e).attr('data-month'), $(e).attr('data-day')));
                 });
-
-            return weekDayElement;
-        }
-        function createEmptyWeekHeaderDay() {
-            return createDiv('header day').append(blankSpace);
-        }
-        function createDay(argDate) {
-            var dayElement = createDiv('day');
-            dayElement
-                .attr('id', 'dias')
-                .attr('data-day', argDate.date())
-                .attr('data-month', argDate.month() + 1)
-                .attr('data-year', argDate.year())
-                .attr('data-week', argDate.isoWeek())
-                .attr('data-weekday', argDate.day())
-                .attr('data-dayofyear', argDate.dayOfYear())
-                .attr('data-bandera', 'false');
-
-            dayElement
-                .append(createDayTitle(argDate))
-                //.append(createDayContents(precio).attr('id', 'pre'))
-                .on('click', function (argEventData) {
-                    selectDay($(this).attr('data-dayofyear'), argEventData);
-                });
-            return dayElement;
-        }
-        //function createDayContents(argContents) {
-        //    return createDiv('content').append(argContents);
-        //}
-        function createDayTitle(argDate) {
-            return createDiv('title').append(argDate.format('D'));
-        }
-        function createEmptyDay() {
-            return createDiv('day disabled').append(createDiv('title')).append(createDiv('content'));
-        }
-    </script>
-
-    <script id="selections">
-        class clsSelection {
-            #dates;
-            constructor() {
-                this.#dates = [];
+                //console.log(currentSelection);
             }
-            add(argDate) {
-                this.#dates.push(argDate);
+            function selectWeek(argWeek, argEventData) {
+                if (!argEventData.ctrlKey) { clearSelection(); }
+                $(`div.day[data-week="${argWeek}"]`).addClass('selected');
+
             }
-        }
-        var currentSelection;
+            function selectWeekDay(argWeekDay, argMonth, argEventData) {
+                if (!argEventData.ctrlKey) { clearSelection(); }
+                $(`div.day[data-weekday="${argWeekDay}"][data-month="${argMonth}"]`).addClass('selected');
+            }
+            function selectDay(argDate, argEventData) {
+                if (!argEventData.ctrlKey) { clearSelection(); }
+                $(`div.day[data-dayofyear="${argDate}"]`).addClass('selected');
+            }
+        
+        </script>
 
-        function clearSelection() {
-            currentSelection = new clsSelection();
-            $('div.day').removeClass('selected');
-        }
-        function beginSelection() { }
-        function endSelection() { }
-
-        function selectMonth(argMonth, argEventData) {
-            if (!argEventData.ctrlKey) { clearSelection(); }
-            $(`div.day[data-month="${argMonth}"]`).addClass('selected').each(function (i, e) {
-                currentSelection.add(new Date($(e).attr('data-year'), $(e).attr('data-month'), $(e).attr('data-day')));
-            });
-            //console.log(currentSelection);
-        }
-        function selectWeek(argWeek, argEventData) {
-            if (!argEventData.ctrlKey) { clearSelection(); }
-            $(`div.day[data-week="${argWeek}"]`).addClass('selected');
-
-        }
-        function selectWeekDay(argWeekDay, argMonth, argEventData) {
-            if (!argEventData.ctrlKey) { clearSelection(); }
-            $(`div.day[data-weekday="${argWeekDay}"][data-month="${argMonth}"]`).addClass('selected');
-        }
-        function selectDay(argDate, argEventData) {
-            if (!argEventData.ctrlKey) { clearSelection(); }
-            $(`div.day[data-dayofyear="${argDate}"]`).addClass('selected');
-        }
-    </script>
-
-    <script id="dialogs">
-        function setupDemoDialog() {
-            var dlg = $('#dialog_demo').dialog({
-                autoOpen: false,
-                height: 'auto',
-                width: 900,
-                modal: true,
-                resizable: false,
-                draggable: true,
-                open: function (event, ui) {},
-                close: function (event, ui) {},
-                buttons: [
-                    {
-                        /*BOTON OK*/
-                        id: 'button_ok',
-                        text: 'Ok',
-                        click: function (capturar) {
-                            let argContents = document.getElementById('precio_dia').value;
-                            x = $("div#dias.selected").toArray();
-                            for (i = 0; i < x.length; i++) {
-                                if($('[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]').find('#precio').length){
-                                    $('[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]').find('#precio').text(argContents);
-                                }else{
-                                    $('[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]').append('<div class="content" id="precio" >' + argContents + '</div>');
-                                }
-                            }
-
-                            $(this).dialog('close');
-                        }
-                    },
-
-                    /*BOTON CERRAR*/
-                    {
-                        id: 'button_Close',
-                        text: 'Close',
-                        click: function () {
-                            $(this).dialog('close');
+        <script id="dialogs">
+            /* Allows only numbers */
+            $("#precio_dia").keydown(function(event){
+                if(event.shiftKey){
+                    event.preventDefault();
+                }
+                if(event.keyCode !=46 && event.keyCode !=8 && event.keyCode != 37 && event.keyCode !=39){
+                    if($(this).val().length>=11){
+                        event.preventDefault();
+                    }
+                }
+                if (event.keyCode < 48 || event.keyCode > 57 ){
+                    if (event.keyCode < 96 || event.keyCode > 105){
+                        if(event.keyCode !=46 && event.keyCode !=8 && event.keyCode !=37 && event.keyCode !=39){
+                            event.preventDefault();
                         }
                     }
-                ]
+                }
             });
-            dlg.parent().appendTo(jQuery("body:first"));
-        }
+
+            function setupDemoDialog() {
+                var dlg = $('#dialog_demo').dialog({
+                    autoOpen: false,
+                    height: 'auto',
+                    width: 900,
+                    modal: true,
+                    resizable: false,
+                    draggable: true,
+                    open: function (event, ui) {},
+                    close: function (event, ui) {},
+                    buttons: [
+                        {   
+                            /*BOTON OK*/
+                            id: 'button_ok',
+                            text: 'Ok',
+                            click: function (capturar) {
+                                let argContents = document.getElementById('precio_dia').value;
+                                let x = $("div#dias.selected").toArray();
+                                for (let i = 0; i < x.length; i++) {
+                                    /* Add price for each selected day */
+                                    let dayYear = '[data-dayofyear="'+ x[i].getAttribute("data-dayofyear") + '"]';
+                                    if($(dayYear).find('#precio').length){
+                                        $(dayYear).find('#precio').text(argContents);
+                                    }else{
+                                        $(dayYear).append('<div class="content" id="precio" >' + argContents + '</div>');
+                                    }
+                                }
+                                $(this).dialog('close');
+                                $('#precio_dia').val('');
+                            }
+                        },
+                        /*BOTON CERRAR*/
+                        {
+                            id: 'button_Close',
+                            text: 'Close',
+                            click: function () {
+                                $(this).dialog('close');
+                                $('#precio_dia').val('');
+                            }
+                        }
+
+                    ]
+                });
+                dlg.parent().appendTo(jQuery("body:first"));
+            }
         
-        function openDemoDialog() {
-            $('#dialog_demo').dialog('open');
-            return false;
-        }
-    </script>
+            function openDemoDialog() {
+                $('#dialog_demo').dialog('open');
+                return false;
+            }
+        </script>
 
-    <script>
-        function finalizar() {
+        <script>
+            function finalizar() {
 
-            const finalizar = document.getElementById("finalizar");
+                const finalizar = document.getElementById("finalizar");
 
-            x = $("#dias.day").toArray();
-            console.log(x);
-            xxx = $('#precio.content').toArray();
-            console.log(xxx);
+                x = $("#dias.day").toArray();
+                console.log(x);
+                xxx = $('#precio.content').toArray();
+                console.log(xxx);
             
-        }
+            }
 
 
-    </script>
+        </script>
 
-</body>
-       
+    </body>
+
+</html>
