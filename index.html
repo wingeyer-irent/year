@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta charset="utf-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script src="https://sys-static-content.s3.amazonaws.com/scripts/momentjs-2.18.1/moment-with-locales.min.js"></script>
+        <script src="https://sys-static-content.s3.amazonaws.com/scripts/jqueryui-1.12.0/jquery-ui.min.js"></script>
+        <script src="builder.js"></script>
+        <script src="dialogs.js"></script>
+        <script src="main.js"></script>
+        <script src="selection.js"></script>
+
+        <link href="https://www.rentalbookingsystem.com/styles.css" type="text/css" rel="stylesheet" />
+        <link href="https://sys-static-content.s3.amazonaws.com/css/jquery-ui-1.12.0/smoothness/jquery-ui.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+
+        <title>Calendario</title>
+    </head>
+
+    <body>
+        <div id="dialog_demo" class="ui-helper-hidden" title="Establecer el Precio">
+            <div class="flexdialog">
+                <div>
+                    <i class="icon-users-1 big"></i>
+                </div>
+                <div>
+                    <p>Definir Precio</p>
+                    <form action="">
+                        <label> Ingrese el Precio por día:</label>
+                        <input type="number" min="1" id="precio_dia">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <p><a id="btn_price" href="#" onclick="return openDemoDialog();">Definir Precio</a></p>
+        <br />
+        <hr />
+        <div>
+            <label id=""><input type="checkbox" name="precios" value="Precios" />Precio</label>
+            <br />
+            <hr />
+            <label><input type="checkbox" name="estanciaMin" value="Estancia Minima" />Estancia Minima</label>
+            <br />
+            <hr />
+            <label><input type="checkbox" name="estanciaMax" value="Estancia Maxima" />Estancia Maxima</label>
+            <br />
+            <hr />
+            <label><input type="checkbox" name="entrada" value="Dia de entrada" />Día de Ingreso</label>
+            <br />
+            <hr />
+            <button class="btn-flotante" id="finalizar" onclick="finalizar()">Finalizar</button>
+        </div>
+    </body>
+</html>
