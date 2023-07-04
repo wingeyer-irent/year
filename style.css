@@ -131,3 +131,7 @@ body {
 a #guardar {
     align-content: center;
 }
+
+#dias.shift-selected {
+    background-color: lightblue;
+}
